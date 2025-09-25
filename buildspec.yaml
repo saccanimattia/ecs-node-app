@@ -1,0 +1,33 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "eu-central-1"
+    APP_NAME: "my-webapp"
+    ENVIRONMENT: "production"
+
+phases:
+  pre_build:
+    commands:
+      - echo "Login to ECR..."
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}
+      - IMAGE_URI="${REPOSITORY_URI}:latest"
+      - docker pull $IMAGE_URI || true
+      - export COMPOSE_DOCKER_CLI_BUILD=1
+      - export DOCKER_BUILDKIT=1
+
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - docker build -t "$IMAGE_URI" .
+
+  post_build:
+    commands:
+      - echo "Pushing image to ECR..."
+      - docker push "$IMAGE_URI"
+      - echo "Writing imagedefinitions.json for ECS..."
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$APP_NAME" "$IMAGE_URI" > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
