@@ -1,15 +1,10 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import * as dotenv from "dotenv";
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
-dotenv.config();
-
-const { GITHUB_OWNER, GITHUB_REPO, GITHUB_TOKEN_SECRET } = process.env;
+const PREFIX = 'ventie30-ecs-demo'
 
 export class CdkDemoAppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    
   }
 }
