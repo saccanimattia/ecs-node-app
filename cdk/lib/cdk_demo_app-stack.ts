@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { CodePipeline, ShellStep, CodePipelineSource } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import * as env from 'dotenv';
+import { PipelineStage } from './pipelineStage';
 
 env.config();
 
@@ -36,5 +37,7 @@ export class CdkDemoAppStack extends cdk.Stack {
       pipelineName: `${PREFIX}-pipeline`,
       synth: shellStep,
     });
+
+    const testStage = codePipeline.addStage(new PipelineStage(this, 'Test'));
   }
 }
