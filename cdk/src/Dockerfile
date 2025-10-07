@@ -1,6 +1,5 @@
 # Usa una base leggera Node.js
-FROM node:20-alpine
-
+FROM public.ecr.aws/docker/library/node:18-alpine
 # Imposta la working directory
 WORKDIR /app
 
